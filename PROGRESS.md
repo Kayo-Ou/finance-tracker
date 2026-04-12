@@ -48,7 +48,7 @@ record.stocks = record.sfExpress;
 record.total = record.alipayTotal + record.bankTotal + record.eggFund + 
                record.securityTotal + record.agricultureBank;
 ---
-
+```
 ## ✅ 现在需要做什么
 
 这个文件已经自动上传到你的 GitHub 仓库了！
