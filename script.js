@@ -27,7 +27,6 @@ class FinanceTracker {
     // 添加新记录
     addRecord() {
         const date = document.getElementById('dateInput').value;
-
         if (!date) {
             alert('请选择日期');
             return;
