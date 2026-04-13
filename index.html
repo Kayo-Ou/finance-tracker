@@ -3,133 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人资产管理工具</title>
+    <title>个人资产管理</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <link rel="stylesheet" href="style.css">
-    <!-- 引入 ECharts 图表库 -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>💰 个人资产管理和投资记录</h1>
-        
-        <!-- 三个图表区域 -->
-        <div class="charts-container">
-            <div class="chart-box">
-                <h3>现金存款变化趋势</h3>
-                <div id="cashChart" style="width: 100%; height: 300px;"></div>
+        <!-- 页面头部 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="header-title">个人资产管理</h1>
+                <p class="header-subtitle">优雅地追踪您的财富增长</p>
             </div>
-            
-            <div class="chart-box">
-                <h3>资产占比分布</h3>
-                <div id="pieChart" style="width: 100%; height: 300px;"></div>
-            </div>
-            
-            <div class="chart-box">
-                <h3>总资产变化趋势</h3>
-                <div id="totalChart" style="width: 100%; height: 300px;"></div>
-            </div>
-        </div>
+        </header>
 
-        <!-- 数据输入和表格区域 -->
-        <div class="data-section">
-            <h2>📊 每月资产记录</h2>
-            
-            <!-- 输入表单 -->
-<div class="input-form">
-    <h3>添加新记录</h3>
-    <div class="form-group">
-        <label>统计日期:</label>
-        <input type="month" id="dateInput" required>
-    </div>
-    
-    <div style="margin-top: 20px;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <!-- 左列：所有总额 -->
-            <div>
-                <h4 style="color: #667eea; margin-bottom: 15px; border-bottom: 2px solid #667eea; padding-bottom: 10px;">💰 总额账户</h4>
-                
-                <div class="form-group">
-                    <label>支付宝总额:</label>
-                    <input type="number" id="alipayTotal" placeholder="0" step="0.01">
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 左侧：表单区域 -->
+            <section class="form-section">
+                <div class="card">
+                    <h2 class="section-title">添加记录</h2>
+                    
+                    <form class="form-container">
+                        <!-- 日期输入 -->
+                        <div class="form-group">
+                            <label for="dateInput">日期</label>
+                            <input type="month" id="dateInput" class="form-input">
+                        </div>
+
+                        <!-- 总额账户区域 -->
+                        <div class="form-section-inner">
+                            <h3 class="form-subsection-title">账户余额</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="alipayTotal">支付宝</label>
+                                    <input type="number" id="alipayTotal" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bankTotal">银行账户</label>
+                                    <input type="number" id="bankTotal" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="securityTotal">证券账户</label>
+                                    <input type="number" id="securityTotal" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="agricultureBank">储蓄账户</label>
+                                    <input type="number" id="agricultureBank" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 基金和个股区域 -->
+                        <div class="form-section-inner">
+                            <h3 class="form-subsection-title">投资资产</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="alipayFund">支付宝基金</label>
+                                    <input type="number" id="alipayFund" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bankFund">银行基金</label>
+                                    <input type="number" id="bankFund" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="securityFund">证券基金</label>
+                                    <input type="number" id="securityFund" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="eggFund">蛋卷基金</label>
+                                    <input type="number" id="eggFund" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sfExpress">股票资产</label>
+                                    <input type="number" id="sfExpress" placeholder="0.00" step="0.01" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 提交按钮 -->
+                        <button type="button" id="addBtn" class="btn-primary">添加记录</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 右侧：图表区域 -->
+            <section class="charts-section">
+                <!-- 现金流趋势 -->
+                <div class="card">
+                    <h2 class="section-title">现金流趋势</h2>
+                    <div id="cashChart" class="chart"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>平安银行总额:</label>
-                    <input type="number" id="bankTotal" placeholder="0" step="0.01">
+                <!-- 总资产趋势 -->
+                <div class="card">
+                    <h2 class="section-title">总资产增长</h2>
+                    <div id="totalChart" class="chart"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>平安证券总额:</label>
-                    <input type="number" id="securityTotal" placeholder="0" step="0.01">
+                <!-- 资产占比分布 -->
+                <div class="card">
+                    <h2 class="section-title">资产配置</h2>
+                    <div id="pieChart" class="chart"></div>
                 </div>
+            </section>
+        </main>
 
-                <div class="form-group">
-                    <label>农业银行总额:</label>
-                    <input type="number" id="agricultureBank" placeholder="0" step="0.01">
+        <!-- 数据表格区域 -->
+        <section class="table-section">
+            <div class="card">
+                <h2 class="section-title">历史记录</h2>
+                <div class="table-wrapper">
+                    <table id="dataTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>现金流</th>
+                                <th>基金资产</th>
+                                <th>股票资产</th>
+                                <th>总资产</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <!-- 右列：所有基金和个股 -->
-<div>
-    <h4 style="color: #764ba2; margin-bottom: 15px; border-bottom: 2px solid #764ba2; padding-bottom: 10px;">📈 基金和个股</h4>
-    
-    <div class="form-group">
-        <label>支付宝基金:</label>
-        <input type="number" id="alipayFund" placeholder="0" step="0.01">
-    </div>
-
-    <div class="form-group">
-        <label>平安银行基金:</label>
-        <input type="number" id="bankFund" placeholder="0" step="0.01">
-    </div>
-
-    <div class="form-group">
-        <label>平安证券基金:</label>
-        <input type="number" id="securityFund" placeholder="0" step="0.01">
-    </div>
-
-    <div class="form-group">
-        <label>蛋卷基金:</label>
-        <input type="number" id="eggFund" placeholder="0" step="0.01">
-    </div>
-
-    <div class="form-group">
-        <label>顺丰控股:</label>
-        <input type="number" id="sfExpress" placeholder="0" step="0.01">
-    </div>
-</div>
-
-    <button id="addBtn" class="btn-add" style="margin-top: 20px; grid-column: 1 / -1; width: 100%;">➕ 添加记录</button>
-</div>
-
-            <!-- 数据表格 -->
-            <div class="table-section">
-                <h3>历史记录</h3>
-                <table id="dataTable">
-                    <thead>
-                        <tr>
-                            <th>统计日期</th>
-                            <th>支付宝总额</th>
-                            <th>支付宝基金</th>
-                            <th>平安银行总额</th>
-                            <th>平安银行基金</th>
-                            <th>蛋卷基金</th>
-                            <th>平安证券总额</th>
-                            <th>平安证券基金</th>
-                            <th>农业银行总额</th>
-                            <th>顺丰控股</th>
-                            <th>现金存款</th>
-                            <th>投资基金</th>
-                            <th>持有股票</th>
-                            <th>总资产</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        </section>
     </div>
 
     <script src="script.js"></script>

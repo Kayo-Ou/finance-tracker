@@ -59,10 +59,10 @@ class FinanceTracker {
         const existingIndex = this.data.findIndex(r => r.date === date);
         if (existingIndex !== -1) {
             this.data[existingIndex] = record;
-            alert('该月份记录已更新！');
+            alert('该月份记录已更新');
         } else {
             this.data.push(record);
-            alert('记录添加成功！');
+            alert('记录添加成功');
         }
 
         this.data.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -105,15 +105,6 @@ class FinanceTracker {
             const row = tbody.insertRow();
             row.innerHTML = `
                 <td>${record.date}</td>
-                <td>¥ ${record.alipayTotal.toFixed(2)}</td>
-                <td>¥ ${record.alipayFund.toFixed(2)}</td>
-                <td>¥ ${record.bankTotal.toFixed(2)}</td>
-                <td>¥ ${record.bankFund.toFixed(2)}</td>
-                <td>¥ ${record.eggFund.toFixed(2)}</td>
-                <td>¥ ${record.securityTotal.toFixed(2)}</td>
-                <td>¥ ${record.securityFund.toFixed(2)}</td>
-                <td>¥ ${record.agricultureBank.toFixed(2)}</td>
-                <td>¥ ${record.sfExpress.toFixed(2)}</td>
                 <td>¥ ${record.cash.toFixed(2)}</td>
                 <td>¥ ${record.funds.toFixed(2)}</td>
                 <td>¥ ${record.stocks.toFixed(2)}</td>
@@ -126,11 +117,11 @@ class FinanceTracker {
     // 更新图表
     updateCharts() {
         this.updateCashChart();
-        this.updatePieChart();
         this.updateTotalChart();
+        this.updatePieChart();
     }
 
-    // 现金存款变化图表
+    // 现金流趋势图表
     updateCashChart() {
         const chartDom = document.getElementById('cashChart');
         const myChart = echarts.init(chartDom);
@@ -142,28 +133,101 @@ class FinanceTracker {
                 series: [{ data: [], type: 'line' }]
             });
             return;
-        };
-
-        const dates = this.data.map(r => r.date);
-        const cashValues = this.data.map(r => r.cash);
+        }
 
         const option = {
-            tooltip: { trigger: 'axis' },
-            xAxis: { type: 'category', data: dates },
-            yAxis: { type: 'value' },
+            color: ['#2E8B57'],
+            tooltip: { 
+                trigger: 'axis', 
+                backgroundColor: 'rgba(44, 62, 80, 0.9)', 
+                borderColor: 'transparent',
+                textStyle: { color: '#FFFFFF' },
+                borderRadius: 8,
+                padding: [12, 16]
+            },
+            grid: { left: '10%', right: '4%', bottom: '12%', top: '4%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: this.data.map(d => d.date),
+                boundaryGap: false,
+                axisLine: { lineStyle: { color: '#ECF0F1' } },
+                axisLabel: { color: '#95A5A6', fontSize: 12 }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { lineStyle: { color: '#ECF0F1' } },
+                axisLabel: { color: '#95A5A6', fontSize: 12 },
+                splitLine: { lineStyle: { color: '#F5F7FA', type: 'dashed' } }
+            },
             series: [{
-                data: cashValues,
+                name: '现金流',
                 type: 'line',
-                smooth: true,
-                itemStyle: { color: '#667eea' },
-                areaStyle: { color: 'rgba(102, 126, 234, 0.2)' }
+                data: this.data.map(d => d.cash),
+                smooth: 0.3,
+                itemStyle: { color: '#2E8B57' },
+                areaStyle: { color: 'rgba(46, 139, 87, 0.08)' },
+                lineStyle: { width: 2.5, color: '#2E8B57' },
+                symbolSize: 6
             }]
         };
 
         myChart.setOption(option);
     }
 
-    // 资产占比图表
+    // 总资产增长图表
+    updateTotalChart() {
+        const chartDom = document.getElementById('totalChart');
+        const myChart = echarts.init(chartDom);
+
+        if (this.data.length === 0) {
+            myChart.setOption({
+                xAxis: { type: 'category', data: [] },
+                yAxis: { type: 'value' },
+                series: [{ data: [], type: 'line' }]
+            });
+            return;
+        }
+
+        const option = {
+            color: ['#7C4DFF'],
+            tooltip: { 
+                trigger: 'axis', 
+                backgroundColor: 'rgba(44, 62, 80, 0.9)', 
+                borderColor: 'transparent',
+                textStyle: { color: '#FFFFFF' },
+                borderRadius: 8,
+                padding: [12, 16]
+            },
+            grid: { left: '10%', right: '4%', bottom: '12%', top: '4%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: this.data.map(d => d.date),
+                boundaryGap: false,
+                axisLine: { lineStyle: { color: '#ECF0F1' } },
+                axisLabel: { color: '#95A5A6', fontSize: 12 }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { lineStyle: { color: '#ECF0F1' } },
+                axisLabel: { color: '#95A5A6', fontSize: 12 },
+                splitLine: { lineStyle: { color: '#F5F7FA', type: 'dashed' } }
+            },
+            series: [{
+                name: '总资产',
+                type: 'line',
+                data: this.data.map(d => d.total),
+                smooth: 0.3,
+                itemStyle: { color: '#7C4DFF' },
+                areaStyle: { color: 'rgba(124, 77, 255, 0.08)' },
+                lineStyle: { width: 2.5, color: '#7C4DFF' },
+                symbolSize: 6
+            }]
+        };
+
+        myChart.setOption(option);
+    }
+
+    // 资产配置图表
     updatePieChart() {
         const chartDom = document.getElementById('pieChart');
         const myChart = echarts.init(chartDom);
@@ -178,68 +242,39 @@ class FinanceTracker {
         const latest = this.data[this.data.length - 1];
 
         const option = {
+            color: ['#2E8B57', '#FFB347', '#1E88E5'],
             tooltip: {
                 trigger: 'item',
+                backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                borderColor: 'transparent',
+                textStyle: { color: '#FFFFFF' },
+                borderRadius: 8,
+                padding: [12, 16],
                 formatter: function (params) {
-                    return '<span style="display:inline-block; width:8px; height:8px; background-color:' + params.color + '; border-radius:50%; margin-right:5px;"></span>' +
-                        '日期: ' + tracker.data[tracker.data.length - 1].date + '<br/>' +
-                        params.name + '<br/>' +
-                        '金额: ￥' + params.value.toFixed(2) + '<br/>' +
+                    return '<div style="font-weight: 500;">' + params.name + '</div>' +
+                        '金额: ¥' + params.value.toFixed(2) + '<br/>' +
                         '占比: ' + params.percent + '%';
                 }
             },
             series: [{
-                name: '资产占比',
+                name: '资产配置',
                 type: 'pie',
-                radius: '50%',
+                radius: ['35%', '75%'],
                 data: [
-                    { value: latest.cash, name: '现金存款' },
-                    { value: latest.funds, name: '投资基金' },
-                    { value: latest.stocks, name: '持有股票' }
+                    { value: latest.cash, name: '现金流' },
+                    { value: latest.funds, name: '基金资产' },
+                    { value: latest.stocks, name: '股票资产' }
                 ],
-                label: {
+                label: { 
                     show: false
                 },
                 emphasis: {
                     itemStyle: {
-                        shadowBlur: 10,
+                        shadowBlur: 20,
                         shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        shadowColor: 'rgba(0, 0, 0, 0.2)'
                     }
                 }
-            }]
-        };
-
-        myChart.setOption(option);
-    }
-
-    // 总资产变化图表
-    updateTotalChart() {
-        const chartDom = document.getElementById('totalChart');
-        const myChart = echarts.init(chartDom);
-
-        if (this.data.length === 0) {
-            myChart.setOption({
-                xAxis: { type: 'category', data: [] },
-                yAxis: { type: 'value' },
-                series: [{ data: [], type: 'line' }]
-            });
-            return;
-        }
-
-        const dates = this.data.map(r => r.date);
-        const totalValues = this.data.map(r => r.total);
-
-        const option = {
-            tooltip: { trigger: 'axis' },
-            xAxis: { type: 'category', data: dates },
-            yAxis: { type: 'value' },
-            series: [{
-                data: totalValues,
-                type: 'line',
-                smooth: true,
-                itemStyle: { color: '#764ba2' },
-                areaStyle: { color: 'rgba(118, 75, 162, 0.2)' }
             }]
         };
 
