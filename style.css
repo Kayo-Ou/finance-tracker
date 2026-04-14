@@ -471,7 +471,7 @@ body {
 /* 数值列左对齐 */
 .data-table td:nth-child(n+2):not(:last-child),
 .data-table th:nth-child(n+2):not(:last-child) {
-    text-align: left;  /* 改成 left */
+    text-align: left !important;  /* 加上 !important */
     font-family: 'Courier New', monospace;
     font-weight: 500;
     color: var(--text-secondary);
@@ -480,7 +480,7 @@ body {
 /* 操作列左对齐 */
 .data-table td:last-child,
 .data-table th:last-child {
-    text-align: left;
+    text-align: left !important;  /* 也加上 !important */
 }
 
 /* ==================== 响应式设计 ==================== */
