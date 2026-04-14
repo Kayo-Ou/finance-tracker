@@ -105,22 +105,31 @@ class FinanceTracker {
     }
 
     // 渲染表格
-    renderTable() {
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
+renderTable() {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
 
-        this.data.forEach((record, index) => {
-            const row = tbody.insertRow();
-            row.innerHTML = `
-                <td>${record.date}</td>
-                <td>¥ ${record.cash.toFixed(2)}</td>
-                <td>¥ ${record.funds.toFixed(2)}</td>
-                <td>¥ ${record.stocks.toFixed(2)}</td>
-                <td><strong>¥ ${record.total.toFixed(2)}</strong></td>
-                <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
-            `;
-        });
-    }
+    this.data.forEach((record, index) => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td>${record.date}</td>
+            <td>¥ ${record.pingAn_bank_total.toFixed(2)}</td>
+            <td>¥ ${record.pingAn_bank_fund.toFixed(2)}</td>
+            <td>¥ ${record.pingAn_security_total.toFixed(2)}</td>
+            <td>¥ ${record.pingAn_security_fund.toFixed(2)}</td>
+            <td>¥ ${record.alipay_total.toFixed(2)}</td>
+            <td>¥ ${record.alipay_fund.toFixed(2)}</td>
+            <td>¥ ${record.agriculture_bank_total.toFixed(2)}</td>
+            <td>¥ ${record.xueqiu_fund.toFixed(2)}</td>
+            <td>¥ ${record.sf_stock.toFixed(2)}</td>
+            <td>¥ ${record.cash.toFixed(2)}</td>
+            <td>¥ ${record.funds.toFixed(2)}</td>
+            <td>¥ ${record.stocks.toFixed(2)}</td>
+            <td><strong>¥ ${record.total.toFixed(2)}</strong></td>
+            <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
+        `;
+    });
+}
 
     // 更新图表
     updateCharts() {
