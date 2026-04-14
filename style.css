@@ -197,24 +197,22 @@ body {
 
 .main-content {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 0.8fr 1.5fr;
     gap: 32px;
     margin-bottom: 50px;
-    align-items: stretch;
-    min-height: 700px;  /* 设置最小高度，你可以调整这个数值 */
+    align-items: flex-start;  /* 保持顶部对齐，不强行扩展 */
 }
 
 .form-section {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    /* 删除 height: 100% */
 }
 
 .form-section .card {
-    height: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;  /* 表单内容过多时可以滚动 */
+    /* 删除 height: 100% */
 }
 
 .charts-section {
