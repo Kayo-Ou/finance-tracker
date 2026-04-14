@@ -106,7 +106,14 @@ class FinanceTracker {
 
     // 渲染表格
 renderTable() {
-    const tbody = document.getElementById('tableBody');
+    this.renderAccountsTable();
+    this.renderFundsTable();
+    this.renderDerivedTable();
+}
+
+// 渲染账户总值表格
+renderAccountsTable() {
+    const tbody = document.getElementById('accountsTableBody');
     tbody.innerHTML = '';
 
     this.data.forEach((record, index) => {
@@ -114,13 +121,41 @@ renderTable() {
         row.innerHTML = `
             <td>${record.date}</td>
             <td>¥ ${record.pingAn_bank_total.toFixed(2)}</td>
-            <td>¥ ${record.pingAn_bank_fund.toFixed(2)}</td>
             <td>¥ ${record.pingAn_security_total.toFixed(2)}</td>
-            <td>¥ ${record.pingAn_security_fund.toFixed(2)}</td>
             <td>¥ ${record.alipay_total.toFixed(2)}</td>
-            <td>¥ ${record.alipay_fund.toFixed(2)}</td>
             <td>¥ ${record.agriculture_bank_total.toFixed(2)}</td>
+            <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
+        `;
+    });
+}
+
+// 渲染基金市值表格
+renderFundsTable() {
+    const tbody = document.getElementById('fundsTableBody');
+    tbody.innerHTML = '';
+
+    this.data.forEach((record, index) => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td>${record.date}</td>
+            <td>¥ ${record.pingAn_bank_fund.toFixed(2)}</td>
+            <td>¥ ${record.pingAn_security_fund.toFixed(2)}</td>
+            <td>¥ ${record.alipay_fund.toFixed(2)}</td>
             <td>¥ ${record.xueqiu_fund.toFixed(2)}</td>
+            <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
+        `;
+    });
+}
+
+// 渲染衍生数据表格
+renderDerivedTable() {
+    const tbody = document.getElementById('derivedTableBody');
+    tbody.innerHTML = '';
+
+    this.data.forEach((record, index) => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td>${record.date}</td>
             <td>¥ ${record.sf_stock.toFixed(2)}</td>
             <td>¥ ${record.cash.toFixed(2)}</td>
             <td>¥ ${record.funds.toFixed(2)}</td>
@@ -387,12 +422,43 @@ class AvatarManager {
     }
 }
 
+// ==================== Tab 切换功能 ====================
+
+class TabManager {
+    constructor() {
+        this.tabBtns = document.querySelectorAll('.tab-btn');
+        this.tabContents = document.querySelectorAll('.table-tab-content');
+        
+        this.init();
+    }
+
+    init() {
+        this.tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => this.switchTab(btn));
+        });
+    }
+
+    switchTab(btn) {
+        const tabName = btn.getAttribute('data-tab');
+
+        // 移除所有 active 类
+        this.tabBtns.forEach(b => b.classList.remove('active'));
+        this.tabContents.forEach(c => c.classList.remove('active'));
+
+        // 添加 active 类到当前 Tab
+        btn.classList.add('active');
+        document.getElementById(`${tabName}Table`).classList.add('active');
+    }
+}
+
 // ==================== 应用启动 ====================
 
 let tracker;
 let avatarManager;
+let tabManager;
 
 document.addEventListener('DOMContentLoaded', () => {
     avatarManager = new AvatarManager();
     tracker = new FinanceTracker();
+    tabManager = new TabManager();  // 新增
 });
