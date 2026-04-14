@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,24 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <!-- 页面头部 -->
         <header class="header">
             <div class="header-content">
-                <h1 class="header-title">个人资产管理</h1>
-                <p class="header-subtitle">优雅地追踪您的财富增长</p>
+                <div class="header-top">
+                    <div class="avatar-container">
+                        <div class="avatar-circle" id="avatarCircle">
+                            <img id="avatarImage" src="" alt="头像" class="avatar-image">
+                            <div class="avatar-placeholder" id="avatarPlaceholder">
+                                <span class="avatar-plus">+</span>
+                            </div>
+                        </div>
+                        <input type="file" id="avatarInput" class="avatar-input" accept="image/*">
+                    </div>
+                    <h1 class="header-title">个人资产管理</h1>
+                </div>
             </div>
         </header>
 
@@ -23,80 +35,78 @@
             <section class="form-section">
                 <div class="card">
                     <h2 class="section-title">添加记录</h2>
-                    
+
                     <form class="form-container">
-                        <!-- 日期输入 -->
-                        <div class="form-group">
-                            <label for="dateInput">日期</label>
-                            <input type="month" id="dateInput" class="form-input">
-                        </div>
+    <!-- 日期输入 -->
+    <div class="form-group">
+        <label for="dateInput">日期</label>
+        <input type="month" id="dateInput" class="form-input">
+    </div>
 
-                        <!-- 总额账户区域 -->
-                        <div class="form-section-inner">
-                            <h3 class="form-subsection-title">账户余额</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="alipayTotal">支付宝</label>
-                                    <input type="number" id="alipayTotal" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                                <div class="form-group">
-                                    <label for="bankTotal">银行账户</label>
-                                    <input type="number" id="bankTotal" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                            </div>
+    <!-- 账户总值区域 -->
+    <div class="form-section-inner">
+        <h3 class="form-subsection-title">账户总值</h3>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="pingAn_bank_total">平安银行总值</label>
+                <input type="number" id="pingAn_bank_total" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="pingAn_security_total">平安证券总值</label>
+                <input type="number" id="pingAn_security_total" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+        </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="securityTotal">证券账户</label>
-                                    <input type="number" id="securityTotal" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                                <div class="form-group">
-                                    <label for="agricultureBank">储蓄账户</label>
-                                    <input type="number" id="agricultureBank" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                            </div>
-                        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="alipay_total">支付宝总值</label>
+                <input type="number" id="alipay_total" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="agriculture_bank_total">农业银行总值</label>
+                <input type="number" id="agriculture_bank_total" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+        </div>
+    </div>
 
-                        <!-- 基金和个股区域 -->
-                        <div class="form-section-inner">
-                            <h3 class="form-subsection-title">投资资产</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="alipayFund">支付宝基金</label>
-                                    <input type="number" id="alipayFund" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                                <div class="form-group">
-                                    <label for="bankFund">银行基金</label>
-                                    <input type="number" id="bankFund" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                            </div>
+    <!-- 投资资产区域 -->
+    <div class="form-section-inner">
+        <h3 class="form-subsection-title">投资资产</h3>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="pingAn_bank_fund">平安银行基金市值</label>
+                <input type="number" id="pingAn_bank_fund" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="pingAn_security_fund">平安证券基金市值</label>
+                <input type="number" id="pingAn_security_fund" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+        </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="securityFund">证券基金</label>
-                                    <input type="number" id="securityFund" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                                <div class="form-group">
-                                    <label for="eggFund">蛋卷基金</label>
-                                    <input type="number" id="eggFund" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                            </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="alipay_fund">支付宝基金市值</label>
+                <input type="number" id="alipay_fund" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="xueqiu_fund">雪球基金市值</label>
+                <input type="number" id="xueqiu_fund" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+        </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="sfExpress">股票资产</label>
-                                    <input type="number" id="sfExpress" placeholder="0.00" step="0.01" class="form-input">
-                                </div>
-                            </div>
-                        </div>
+        <div class="form-row form-row-single">
+            <div class="form-group">
+                <label for="sf_stock">顺丰控股市值</label>
+                <input type="number" id="sf_stock" placeholder="0.00" step="0.01" class="form-input">
+            </div>
+        </div>
+    </div>
 
-                        <!-- 提交按钮 -->
-                        <button type="button" id="addBtn" class="btn-primary">添加记录</button>
-                    </form>
-                </div>
-            </section>
+    <!-- 提交按钮 -->
+    <button type="button" id="addBtn" class="btn-primary">添加记录</button>
+</form>
 
             <!-- 右侧：图表区域 -->
             <section class="charts-section">
@@ -146,4 +156,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

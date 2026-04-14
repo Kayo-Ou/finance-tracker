@@ -34,26 +34,34 @@ class FinanceTracker {
 
         const record = {
             date: date,
-            alipayTotal: parseFloat(document.getElementById('alipayTotal').value) || 0,
-            alipayFund: parseFloat(document.getElementById('alipayFund').value) || 0,
-            bankTotal: parseFloat(document.getElementById('bankTotal').value) || 0,
-            bankFund: parseFloat(document.getElementById('bankFund').value) || 0,
-            eggFund: parseFloat(document.getElementById('eggFund').value) || 0,
-            securityTotal: parseFloat(document.getElementById('securityTotal').value) || 0,
-            securityFund: parseFloat(document.getElementById('securityFund').value) || 0,
-            agricultureBank: parseFloat(document.getElementById('agricultureBank').value) || 0,
-            sfExpress: parseFloat(document.getElementById('sfExpress').value) || 0,
+            pingAn_bank_total: parseFloat(document.getElementById('pingAn_bank_total').value) || 0,
+            pingAn_security_total: parseFloat(document.getElementById('pingAn_security_total').value) || 0,
+            alipay_total: parseFloat(document.getElementById('alipay_total').value) || 0,
+            agriculture_bank_total: parseFloat(document.getElementById('agriculture_bank_total').value) || 0,
+            pingAn_bank_fund: parseFloat(document.getElementById('pingAn_bank_fund').value) || 0,
+            pingAn_security_fund: parseFloat(document.getElementById('pingAn_security_fund').value) || 0,
+            alipay_fund: parseFloat(document.getElementById('alipay_fund').value) || 0,
+            xueqiu_fund: parseFloat(document.getElementById('xueqiu_fund').value) || 0,
+            sf_stock: parseFloat(document.getElementById('sf_stock').value) || 0,
         }
 
         // 计算衍生数据
-        record.cash = (record.alipayTotal - record.alipayFund) +
-            (record.bankTotal - record.bankFund) +
-            (record.securityTotal - record.securityFund - record.sfExpress) +
-            record.agricultureBank;
-        record.funds = record.alipayFund + record.bankFund + record.eggFund + record.securityFund;
-        record.stocks = record.sfExpress;
-        record.total = record.alipayTotal + record.bankTotal + record.eggFund +
-            record.securityTotal + record.agricultureBank;
+        // 现金流 = 账户总值 - 基金投资
+        record.cash = (record.pingAn_bank_total - record.pingAn_bank_fund) +
+            (record.pingAn_security_total - record.pingAn_security_fund) +
+            (record.alipay_total - record.alipay_fund) +
+            record.agriculture_bank_total;
+
+        // 基金资产 = 所有基金市值
+        record.funds = record.pingAn_bank_fund + record.pingAn_security_fund + record.alipay_fund + record.xueqiu_fund;
+
+        // 股票资产 = 顺丰控股市值
+        record.stocks = record.sf_stock;
+
+        // 总资产 = 所有账户总值 + 所有基金 + 股票
+        record.total = record.pingAn_bank_total + record.pingAn_security_total +
+            record.alipay_total + record.agriculture_bank_total +
+            record.xueqiu_fund + record.sf_stock;
 
         // 检查是否已存在相同日期的记录
         const existingIndex = this.data.findIndex(r => r.date === date);
@@ -75,15 +83,15 @@ class FinanceTracker {
     // 清空表单
     clearForm() {
         document.getElementById('dateInput').value = '';
-        document.getElementById('alipayTotal').value = '';
-        document.getElementById('alipayFund').value = '';
-        document.getElementById('bankTotal').value = '';
-        document.getElementById('bankFund').value = '';
-        document.getElementById('eggFund').value = '';
-        document.getElementById('securityTotal').value = '';
-        document.getElementById('securityFund').value = '';
-        document.getElementById('agricultureBank').value = '';
-        document.getElementById('sfExpress').value = '';
+        document.getElementById('pingAn_bank_total').value = '';
+        document.getElementById('pingAn_security_total').value = '';
+        document.getElementById('alipay_total').value = '';
+        document.getElementById('agriculture_bank_total').value = '';
+        document.getElementById('pingAn_bank_fund').value = '';
+        document.getElementById('pingAn_security_fund').value = '';
+        document.getElementById('alipay_fund').value = '';
+        document.getElementById('xueqiu_fund').value = '';
+        document.getElementById('sf_stock').value = '';
     }
 
     // 删除记录
@@ -137,9 +145,9 @@ class FinanceTracker {
 
         const option = {
             color: ['#2E8B57'],
-            tooltip: { 
-                trigger: 'axis', 
-                backgroundColor: 'rgba(44, 62, 80, 0.9)', 
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(44, 62, 80, 0.9)',
                 borderColor: 'transparent',
                 textStyle: { color: '#FFFFFF' },
                 borderRadius: 8,
@@ -190,9 +198,9 @@ class FinanceTracker {
 
         const option = {
             color: ['#7C4DFF'],
-            tooltip: { 
-                trigger: 'axis', 
-                backgroundColor: 'rgba(44, 62, 80, 0.9)', 
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(44, 62, 80, 0.9)',
                 borderColor: 'transparent',
                 textStyle: { color: '#FFFFFF' },
                 borderRadius: 8,
@@ -265,7 +273,7 @@ class FinanceTracker {
                     { value: latest.funds, name: '基金资产' },
                     { value: latest.stocks, name: '股票资产' }
                 ],
-                label: { 
+                label: {
                     show: false
                 },
                 emphasis: {
@@ -282,8 +290,100 @@ class FinanceTracker {
     }
 }
 
-// 应用启动
+// ==================== 头像管理 ====================
+
+class AvatarManager {
+    constructor() {
+        this.avatarCircle = document.getElementById('avatarCircle');
+        this.avatarInput = document.getElementById('avatarInput');
+        this.avatarImage = document.getElementById('avatarImage');
+        this.avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+        this.init();
+    }
+
+    init() {
+        // 从 LocalStorage 加载头像
+        this.loadAvatar();
+
+        // 点击圆形打开文件选择器
+        this.avatarCircle.addEventListener('click', () => {
+            this.avatarInput.click();
+        });
+
+        // 文件选择后处理
+        this.avatarInput.addEventListener('change', (e) => {
+            this.handleFileSelect(e);
+        });
+    }
+
+    // 处理文件选择
+    handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // 检查文件类型
+        if (!file.type.startsWith('image/')) {
+            alert('请选择图片文件');
+            return;
+        }
+
+        // 检查文件大小（限制为 2MB）
+        if (file.size > 2 * 1024 * 1024) {
+            alert('图片文件过大，请选择小于 2MB 的图片');
+            return;
+        }
+
+        // 使用 FileReader 读取图片
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imageData = e.target.result;
+            this.setAvatar(imageData);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // 设置头像
+    setAvatar(imageData) {
+        this.avatarImage.src = imageData;
+        this.avatarImage.classList.add('show');
+        this.avatarPlaceholder.classList.add('hide');
+
+        // 保存到 LocalStorage
+        this.saveAvatar(imageData);
+    }
+
+    // 保存头像到 LocalStorage
+    saveAvatar(imageData) {
+        localStorage.setItem('userAvatar', imageData);
+    }
+
+    // 从 LocalStorage 加载头像
+    loadAvatar() {
+        const savedAvatar = localStorage.getItem('userAvatar');
+        if (savedAvatar) {
+            this.avatarImage.src = savedAvatar;
+            this.avatarImage.classList.add('show');
+            this.avatarPlaceholder.classList.add('hide');
+        }
+    }
+
+    // 删除头像
+    removeAvatar() {
+        this.avatarImage.src = '';
+        this.avatarImage.classList.remove('show');
+        this.avatarPlaceholder.classList.remove('hide');
+        localStorage.removeItem('userAvatar');
+        this.avatarInput.value = '';
+    }
+}
+
+// ==================== 应用启动 ====================
+
 let tracker;
+let avatarManager;
+
 document.addEventListener('DOMContentLoaded', () => {
+    avatarManager = new AvatarManager();
     tracker = new FinanceTracker();
 });
