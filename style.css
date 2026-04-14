@@ -200,30 +200,37 @@ body {
     grid-template-columns: 1fr 1.2fr;
     gap: 32px;
     margin-bottom: 50px;
-    align-items: start;  /* 新增 */
+    align-items: stretch;
+    min-height: 700px;  /* 设置最小高度，你可以调整这个数值 */
 }
 
 .form-section {
     display: flex;
     flex-direction: column;
-    height: fit-content;  /* 新增 */
+    height: 100%;
+}
+
+.form-section .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .charts-section {
     display: flex;
     flex-direction: column;
-    gap: 16px;  /* 增加卡片间距，从 0 改成 16px */
+    gap: 16px;
     height: 100%;
 }
 
 .charts-section .card {
-    flex: 1;  /* 平均分配空间 */
-    display: flex;
-    flex-direction: column;
+    flex: 1;  /* 三个卡片等分高度 */
 }
 
-.charts-section .chart {
-    flex: 1;  /* 让图表占满卡片 */
+.chart {
+    width: 100%;
+    flex: 1;  /* 图表占满卡片 */
+    margin-top: 16px;
 }
 
 /* ==================== 标题样式 ==================== */
