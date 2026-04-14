@@ -184,6 +184,7 @@ body {
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    align-self: flex-start;  /* 新增 */
 }
 
 .card:hover {
@@ -199,17 +200,20 @@ body {
     grid-template-columns: 1fr 1.2fr;
     gap: 32px;
     margin-bottom: 50px;
+    align-items: start;  /* 新增 */
 }
 
 .form-section {
     display: flex;
     flex-direction: column;
+    height: fit-content;  /* 新增 */
 }
 
 .charts-section {
     display: flex;
     flex-direction: column;
     gap: 32px;
+    height: fit-content;  /* 新增 */
 }
 
 /* ==================== 标题样式 ==================== */
@@ -423,9 +427,13 @@ body {
 
 @media (max-width: 1024px) {
     .main-content {
-        grid-template-columns: 1fr;
-        gap: 28px;
-    }
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 32px;
+    margin-bottom: 50px;
+    align-items: start;  /* 新增：顶部对齐 */
+    grid-auto-rows: max-content;  /* 新增：自动高度 */
+}
 
     .form-row {
         grid-template-columns: 1fr;
@@ -453,8 +461,20 @@ body {
     }
 
     .card {
-        padding: 20px;
-    }
+    background: var(--white);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    align-self: flex-start;  /* 新增：防止卡片被拉伸 */
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: rgba(52, 152, 219, 0.2);
+    transform: translateY(-2px);
+}
 
     .section-title {
         font-size: 18px;
