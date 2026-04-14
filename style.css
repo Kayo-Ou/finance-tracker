@@ -214,6 +214,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;  /* 表单内容过多时可以滚动 */
 }
 
 .charts-section {
@@ -225,12 +226,16 @@ body {
 
 .charts-section .card {
     flex: 1;  /* 三个卡片等分高度 */
+    display: flex;
+    flex-direction: column;
+    min-height: 0;  /* 重要：允许内部元素正确计算高度 */
 }
 
 .chart {
     width: 100%;
     flex: 1;  /* 图表占满卡片 */
     margin-top: 16px;
+    min-height: 0;  /* 重要：允许 flex 子元素收缩 */
 }
 
 /* ==================== 标题样式 ==================== */
@@ -373,14 +378,6 @@ body {
 
 .btn-delete:active {
     transform: scale(0.98);
-}
-
-/* ==================== 图表样式 ==================== */
-
-.chart {
-    width: 100%;
-    height: 400px;  /* 从 320px 增加到 400px */
-    margin-top: 16px;
 }
 
 /* ==================== 表格区域 ==================== */
