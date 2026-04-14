@@ -108,6 +108,7 @@ class FinanceTracker {
 renderTable() {
     this.renderAccountsTable();
     this.renderFundsTable();
+    this.renderStocksTable();
     this.renderDerivedTable();
 }
 
@@ -147,6 +148,21 @@ renderFundsTable() {
     });
 }
 
+// 渲染股票市值表格
+renderStocksTable() {
+    const tbody = document.getElementById('stocksTableBody');
+    tbody.innerHTML = '';
+
+    this.data.forEach((record, index) => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td>${record.date}</td>
+            <td>¥ ${record.sf_stock.toFixed(2)}</td>
+            <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
+        `;
+    });
+}
+
 // 渲染衍生数据表格
 renderDerivedTable() {
     const tbody = document.getElementById('derivedTableBody');
@@ -156,7 +172,6 @@ renderDerivedTable() {
         const row = tbody.insertRow();
         row.innerHTML = `
             <td>${record.date}</td>
-            <td>¥ ${record.sf_stock.toFixed(2)}</td>
             <td>¥ ${record.cash.toFixed(2)}</td>
             <td>¥ ${record.funds.toFixed(2)}</td>
             <td>¥ ${record.stocks.toFixed(2)}</td>

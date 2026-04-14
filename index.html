@@ -141,69 +141,80 @@
         </main>
 
         <!-- 数据表格区域 -->
-<section class="table-section">
-    <div class="card">
-        <h2 class="section-title">历史记录</h2>
-        
-        <!-- Tab 按钮 -->
-        <div class="table-tabs">
-            <button class="tab-btn active" data-tab="accounts">账户总值</button>
-            <button class="tab-btn" data-tab="funds">基金市值</button>
-            <button class="tab-btn" data-tab="derived">衍生数据</button>
-        </div>
+        <section class="table-section">
+            <div class="card">
+                <h2 class="section-title">历史记录</h2>
 
-        <div class="table-wrapper">
-            <!-- 账户总值表格 -->
-            <table id="accountsTable" class="data-table table-tab-content active">
-                <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>平安银行总值</th>
-                        <th>平安证券总值</th>
-                        <th>支付宝总值</th>
-                        <th>农业银行总值</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="accountsTableBody">
-                </tbody>
-            </table>
+                <!-- Tab 按钮 -->
+                <div class="table-tabs">
+                    <button class="tab-btn active" data-tab="accounts">账户总值</button>
+                    <button class="tab-btn" data-tab="funds">基金市值</button>
+                    <button class="tab-btn" data-tab="stocks">股票市值</button>
+                    <button class="tab-btn" data-tab="derived">衍生数据</button>
+                </div>
 
-            <!-- 基金市值表格 -->
-            <table id="fundsTable" class="data-table table-tab-content">
-                <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>平安银行基金市值</th>
-                        <th>平安证券基金市值</th>
-                        <th>支付宝基金市值</th>
-                        <th>雪球基金市值</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="fundsTableBody">
-                </tbody>
-            </table>
+                <div class="table-wrapper">
+                    <!-- 账户总值表格 -->
+                    <table id="accountsTable" class="data-table table-tab-content active">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>平安银行总值</th>
+                                <th>平安证券总值</th>
+                                <th>支付宝总值</th>
+                                <th>农业银行总值</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                        </tbody>
+                    </table>
 
-            <!-- 衍生数据表格 -->
-            <table id="derivedTable" class="data-table table-tab-content">
-                <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>顺丰控股市值</th>
-                        <th>现金流</th>
-                        <th>基金资产</th>
-                        <th>股票资产</th>
-                        <th>总资产</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="derivedTableBody">
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
+                    <!-- 基金市值表格 -->
+                    <table id="fundsTable" class="data-table table-tab-content">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>平安银行基金市值</th>
+                                <th>平安证券基金市值</th>
+                                <th>支付宝基金市值</th>
+                                <th>雪球基金市值</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fundsTableBody">
+                        </tbody>
+                    </table>
+                    <!-- 股票市值表格 -->
+                    <table id="stocksTable" class="data-table table-tab-content">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>顺丰控股市值</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stocksTableBody">
+                        </tbody>
+                    </table>
+                    <!-- 衍生数据表格 -->
+                    <table id="derivedTable" class="data-table table-tab-content">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>现金流</th>
+                                <th>基金资产</th>
+                                <th>股票资产</th>
+                                <th>总资产</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="derivedTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script src="script.js"></script>
