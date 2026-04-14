@@ -212,8 +212,18 @@ body {
 .charts-section {
     display: flex;
     flex-direction: column;
-    gap: 32px;
-    height: fit-content;  /* 新增 */
+    gap: 0;  /* 改成 0，这样卡片之间没有间隙 */
+    height: 100%;  /* 改成 100% */
+}
+
+.charts-section .card {
+    flex: 1;  /* 平均分配空间 */
+    display: flex;
+    flex-direction: column;
+}
+
+.charts-section .chart {
+    flex: 1;  /* 让图表占满卡片 */
 }
 
 /* ==================== 标题样式 ==================== */
