@@ -220,8 +220,7 @@ body {
 .charts-section {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    height: 100%;
+    gap: 24px;  /* 稍微减少间距，让整体更紧凑 */
 }
 
 .charts-section .card {
@@ -233,9 +232,8 @@ body {
 
 .chart {
     width: 100%;
-    flex: 1;  /* 图表占满卡片 */
-    margin-top: 16px;
-    min-height: 0;  /* 重要：允许 flex 子元素收缩 */
+    height: 480px;  /* 从 320px 增加到 480px，约 1.5 倍 */
+    margin-top: 16px;  
 }
 
 /* ==================== 标题样式 ==================== */
@@ -442,11 +440,10 @@ body {
 @media (max-width: 1024px) {
     .main-content {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 0.8fr 1.5fr;  /* 让右侧占更多空间 */
     gap: 32px;
     margin-bottom: 50px;
-    align-items: start;  /* 新增：顶部对齐 */
-    grid-auto-rows: max-content;  /* 新增：自动高度 */
+    align-items: flex-start;
 }
 
     .form-row {
@@ -477,11 +474,11 @@ body {
     .card {
     background: var(--white);
     border-radius: 12px;
-    padding: 32px;
+    padding: 28px;  /* 稍微减少 padding，让图表有更多空间 */
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    align-self: flex-start;  /* 新增：防止卡片被拉伸 */
+    align-self: flex-start;
 }
 
 .card:hover {
