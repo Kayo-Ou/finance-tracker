@@ -46,9 +46,9 @@ class FinanceTracker {
         }
 
         // 计算衍生数据
-        // 现金流 = 账户总值 - 基金投资
+        // 现金流 = 账户总值 - 基金投资 - 股票投资
         record.cash = (record.pingAn_bank_total - record.pingAn_bank_fund) +
-            (record.pingAn_security_total - record.pingAn_security_fund) +
+            (record.pingAn_security_total - record.pingAn_security_fund - record.sf_stock) +
             (record.alipay_total - record.alipay_fund) +
             record.agriculture_bank_total;
 
@@ -58,10 +58,10 @@ class FinanceTracker {
         // 股票资产 = 顺丰控股市值
         record.stocks = record.sf_stock;
 
-        // 总资产 = 所有账户总值 + 所有基金 + 股票
+        // 总资产 = 所有账户总值 + 雪球基金
         record.total = record.pingAn_bank_total + record.pingAn_security_total +
             record.alipay_total + record.agriculture_bank_total +
-            record.xueqiu_fund + record.sf_stock;
+            record.xueqiu_fund;
 
         // 检查是否已存在相同日期的记录
         const existingIndex = this.data.findIndex(r => r.date === date);
@@ -105,21 +105,21 @@ class FinanceTracker {
     }
 
     // 渲染表格
-renderTable() {
-    this.renderAccountsTable();
-    this.renderFundsTable();
-    this.renderStocksTable();
-    this.renderDerivedTable();
-}
+    renderTable() {
+        this.renderAccountsTable();
+        this.renderFundsTable();
+        this.renderStocksTable();
+        this.renderDerivedTable();
+    }
 
-// 渲染账户总值表格
-renderAccountsTable() {
-    const tbody = document.getElementById('accountsTableBody');
-    tbody.innerHTML = '';
+    // 渲染账户总值表格
+    renderAccountsTable() {
+        const tbody = document.getElementById('accountsTableBody');
+        tbody.innerHTML = '';
 
-    this.data.forEach((record, index) => {
-        const row = tbody.insertRow();
-        row.innerHTML = `
+        this.data.forEach((record, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
             <td>${record.date}</td>
             <td>¥ ${record.pingAn_bank_total.toFixed(2)}</td>
             <td>¥ ${record.pingAn_security_total.toFixed(2)}</td>
@@ -127,17 +127,17 @@ renderAccountsTable() {
             <td>¥ ${record.agriculture_bank_total.toFixed(2)}</td>
             <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
         `;
-    });
-}
+        });
+    }
 
-// 渲染基金市值表格
-renderFundsTable() {
-    const tbody = document.getElementById('fundsTableBody');
-    tbody.innerHTML = '';
+    // 渲染基金市值表格
+    renderFundsTable() {
+        const tbody = document.getElementById('fundsTableBody');
+        tbody.innerHTML = '';
 
-    this.data.forEach((record, index) => {
-        const row = tbody.insertRow();
-        row.innerHTML = `
+        this.data.forEach((record, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
             <td>${record.date}</td>
             <td>¥ ${record.pingAn_bank_fund.toFixed(2)}</td>
             <td>¥ ${record.pingAn_security_fund.toFixed(2)}</td>
@@ -145,32 +145,32 @@ renderFundsTable() {
             <td>¥ ${record.xueqiu_fund.toFixed(2)}</td>
             <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
         `;
-    });
-}
+        });
+    }
 
-// 渲染股票市值表格
-renderStocksTable() {
-    const tbody = document.getElementById('stocksTableBody');
-    tbody.innerHTML = '';
+    // 渲染股票市值表格
+    renderStocksTable() {
+        const tbody = document.getElementById('stocksTableBody');
+        tbody.innerHTML = '';
 
-    this.data.forEach((record, index) => {
-        const row = tbody.insertRow();
-        row.innerHTML = `
+        this.data.forEach((record, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
             <td>${record.date}</td>
             <td>¥ ${record.sf_stock.toFixed(2)}</td>
             <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
         `;
-    });
-}
+        });
+    }
 
-// 渲染衍生数据表格
-renderDerivedTable() {
-    const tbody = document.getElementById('derivedTableBody');
-    tbody.innerHTML = '';
+    // 渲染衍生数据表格
+    renderDerivedTable() {
+        const tbody = document.getElementById('derivedTableBody');
+        tbody.innerHTML = '';
 
-    this.data.forEach((record, index) => {
-        const row = tbody.insertRow();
-        row.innerHTML = `
+        this.data.forEach((record, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
             <td>${record.date}</td>
             <td>¥ ${record.cash.toFixed(2)}</td>
             <td>¥ ${record.funds.toFixed(2)}</td>
@@ -178,8 +178,8 @@ renderDerivedTable() {
             <td><strong>¥ ${record.total.toFixed(2)}</strong></td>
             <td><button class="btn-delete" onclick="tracker.deleteRecord(${index})">删除</button></td>
         `;
-    });
-}
+        });
+    }
 
     // 更新图表
     updateCharts() {
@@ -443,7 +443,7 @@ class TabManager {
     constructor() {
         this.tabBtns = document.querySelectorAll('.tab-btn');
         this.tabContents = document.querySelectorAll('.table-tab-content');
-        
+
         this.init();
     }
 
