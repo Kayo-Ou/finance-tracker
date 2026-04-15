@@ -181,11 +181,13 @@ class FinanceTracker {
         });
     }
 
-    // 更新图表
+        // 更新图表
     updateCharts() {
         this.updateCashChart();
         this.updateTotalChart();
         this.updatePieChart();
+        this.updateYoYChart();  // 新增
+        this.updateCAGR();      // 新增
     }
 
     // 现金流趋势图表
@@ -203,7 +205,7 @@ class FinanceTracker {
         }
 
         const option = {
-            color: ['#2E8B57'],
+            color: ['#20C997'],
             tooltip: {
                 trigger: 'axis',
                 backgroundColor: 'rgba(44, 62, 80, 0.9)',
@@ -231,9 +233,9 @@ class FinanceTracker {
                 type: 'line',
                 data: this.data.map(d => d.cash),
                 smooth: 0.3,
-                itemStyle: { color: '#2E8B57' },
-                areaStyle: { color: 'rgba(46, 139, 87, 0.08)' },
-                lineStyle: { width: 2.5, color: '#2E8B57' },
+                itemStyle: { color: '#20C997' },
+                areaStyle: { color: 'rgba(32, 201, 151, 0.08)' },
+                lineStyle: { width: 2.5, color: '#20C997' },
                 symbolSize: 6
             }]
         };
@@ -256,7 +258,7 @@ class FinanceTracker {
         }
 
         const option = {
-            color: ['#7C4DFF'],
+            color: ['#FF1493'],
             tooltip: {
                 trigger: 'axis',
                 backgroundColor: 'rgba(44, 62, 80, 0.9)',
@@ -284,9 +286,9 @@ class FinanceTracker {
                 type: 'line',
                 data: this.data.map(d => d.total),
                 smooth: 0.3,
-                itemStyle: { color: '#7C4DFF' },
-                areaStyle: { color: 'rgba(124, 77, 255, 0.08)' },
-                lineStyle: { width: 2.5, color: '#7C4DFF' },
+                itemStyle: { color: '#FF1493' },
+                areaStyle: { color: 'rgba(255, 20, 147, 0.08)' },
+                lineStyle: { width: 2.5, color: '#FF1493' },
                 symbolSize: 6
             }]
         };
@@ -359,7 +361,199 @@ class FinanceTracker {
 
         myChart.setOption(option);
     }
+    
+    // ==================== 月环比增长率 ====================
+
+    updateYoYChart() {
+        const chartDom = document.getElementById('yoyChart');
+        const myChart = echarts.init(chartDom);
+
+        if (this.data.length <= 1) {
+            myChart.setOption({
+                xAxis: { type: 'category', data: [] },
+                yAxis: { type: 'value' },
+                series: [{ data: [], type: 'bar' }]
+            });
+            return;
+        }
+
+        // 计算月环比增长率
+        const yoyData = [];
+        const dates = [];
+
+        for (let i = 1; i < this.data.length; i++) {
+            const prevTotal = this.data[i - 1].total;
+            const currTotal = this.data[i].total;
+            const growth = ((currTotal - prevTotal) / prevTotal) * 100;
+            
+            yoyData.push(growth.toFixed(2));
+            dates.push(this.data[i].date);
+        }
+
+        const option = {
+            color: ['#3B82F6'],
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                borderColor: 'transparent',
+                textStyle: { color: '#FFFFFF' },
+                borderRadius: 8,
+                padding: [12, 16],
+                formatter: function (params) {
+                    if (params.length > 0) {
+                        const value = parseFloat(params[0].value);
+                        return params[0].name + '<br/>' +
+                            '增长率: ' + value.toFixed(2) + '%';
+                    }
+                    return '';
+                }
+            },
+            grid: { left: '10%', right: '4%', bottom: '12%', top: '4%', containLabel: true },
+                        xAxis: {
+                type: 'category',
+                data: dates,
+                axisLine: { lineStyle: { color: '#ECF0F1' } },
+                axisLabel: { 
+                    color: '#95A5A6', 
+                    fontSize: 11,
+                    rotate: 45  // 让标签倾斜 45 度
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { lineStyle: { color: '#ECF0F1' } },
+                axisLabel: { color: '#95A5A6', fontSize: 12 },
+                splitLine: { lineStyle: { color: '#F5F7FA', type: 'dashed' } }
+            },
+                        series: [{
+                name: '环比增长率',
+                type: 'bar',
+                data: yoyData,
+                barWidth: '60%',
+                itemStyle: {
+                    color: function (params) {
+                        // 0 以上显示粉色，0 以下显示绿色
+                        return parseFloat(params.value) >= 0 ? '#FF1493' : '#00CC00';
+                    }
+                },
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: function (params) {
+                        return params.value + '%';
+                    },
+                    color: '#3B82F6',
+                    fontSize: 11,
+                    fontWeight: 'bold'
+                }
+            }]
+        };
+
+        myChart.setOption(option);
+    }
+
+    // ==================== 复合增长率 (CAGR) ====================
+
+    updateCAGR() {
+        if (this.data.length === 0) {
+            document.getElementById('cagrPercentage').textContent = '0%';
+            return;
+        }
+
+        // 获取开始和结束数据
+        const startData = this.data[0];
+        const endData = this.data[this.data.length - 1];
+
+        const startValue = startData.total;
+        const endValue = endData.total;
+        
+        // 计算年数（从 2024-06 到 2026-04 约 1.83 年）
+        const startDate = new Date(startData.date + '-01');
+        const endDate = new Date(endData.date + '-01');
+        const years = (endDate - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+
+        // CAGR 公式：(结束值/开始值)^(1/年数) - 1
+        let cagr = 0;
+        if (startValue > 0 && years > 0) {
+            cagr = (Math.pow(endValue / startValue, 1 / years) - 1) * 100;
+        }
+
+        const cagrPercentage = cagr.toFixed(2);
+        document.getElementById('cagrPercentage').textContent = cagrPercentage + '%';
+
+        // 更新仪表盘图表
+        this.updateCAGRGauge(parseFloat(cagrPercentage));
+    }
+
+    updateCAGRGauge(cagrValue) {
+        const chartDom = document.getElementById('cagrGauge');
+        const myChart = echarts.init(chartDom);
+
+        // 限制显示最大 100%
+        const displayValue = Math.min(cagrValue, 100);
+
+        const option = {
+            series: [
+                {
+                    type: 'gauge',
+                    startAngle: 225,
+                    endAngle: -45,
+                    radius: '80%',
+                    min: 0,
+                    max: 100,
+                    splitNumber: 10,
+                    axisLine: {
+                        lineStyle: {
+                            width: 8,
+                            color: [
+                                [0.3, '#FF4444'],
+                                [0.7, '#FFA500'],
+                                [1, '#00CC00']
+                            ]
+                        }
+                    },
+                    pointer: {
+                        itemStyle: {
+                            color: 'auto'
+                        }
+                    },
+                    axisTick: {
+                        distance: -8,
+                        length: 8,
+                        lineStyle: {
+                            color: '#fff',
+                            width: 2
+                        }
+                    },
+                    splitLine: {
+                        distance: -8,
+                        length: 30,
+                        lineStyle: {
+                            color: '#fff',
+                            width: 4
+                        }
+                    },
+                    axisLabel: {
+                        color: 'auto',
+                        distance: 16,
+                        fontSize: 12
+                    },
+                    detail: {
+                        valueAnimation: true,
+                        formatter: '{value}%',
+                        color: 'auto',
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    },
+                    data: [{ value: displayValue, name: 'CAGR' }]
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    }
 }
+
 
 // ==================== 头像管理 ====================
 

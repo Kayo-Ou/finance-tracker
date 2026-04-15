@@ -662,3 +662,68 @@ body {
     background: var(--accent-color);
     color: white;
 }
+
+/* ==================== 增长统计区域 ==================== */
+
+.growth-stats {
+    margin-top: 20px;
+}
+
+.cagr-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cagr-label {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    text-align: center;
+}
+
+.cagr-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+#cagrGauge {
+    width: 200px;
+    height: 200px;
+}
+
+.cagr-value {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cagr-percentage {
+    font-size: 48px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.growth-chart {
+    margin-top: 20px;
+}
+
+.growth-chart .chart-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #2C3E50;
+}
+
+.growth-chart .chart {
+    width: 100%;
+    height: 400px;  /* 改成 400px 或更大 */
+    background: white;
+    border-radius: 8px;
+}

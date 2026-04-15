@@ -116,6 +116,26 @@
                         <!-- 提交按钮 -->
                         <button type="button" id="addBtn" class="btn-primary">添加记录</button>
                     </form>
+                                        </form>
+
+                    <!-- CAGR 卡片 -->
+                    <div class="growth-stats">
+                        <div class="cagr-card">
+                            <h3 class="cagr-label">复合增长率 (CAGR)</h3>
+                            <div class="cagr-container">
+                                <div id="cagrGauge" class="cagr-gauge"></div>
+                                <div class="cagr-value">
+                                    <span id="cagrPercentage" class="cagr-percentage">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 月环比增长率图表 -->
+                    <div class="growth-chart">
+                        <h3 class="chart-title">月环比增长率</h3>
+                        <div id="yoyChart" class="chart"></div>
+                    </div>
                 </div>
             </section>
             <!-- 右侧：图表区域 -->
