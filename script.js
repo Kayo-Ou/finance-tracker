@@ -295,74 +295,74 @@ class FinanceTracker {
     }
 
     // 资产配置图表
-updatePieChart() {
-    const chartDom = document.getElementById('pieChart');
-    const myChart = echarts.init(chartDom);
+    updatePieChart() {
+        const chartDom = document.getElementById('pieChart');
+        const myChart = echarts.init(chartDom);
 
-    if (this.data.length === 0) {
-        myChart.setOption({
-            series: [{ data: [], type: 'pie' }]
-        });
-        return;
-    }
+        if (this.data.length === 0) {
+            myChart.setOption({
+                series: [{ data: [], type: 'pie' }]
+            });
+            return;
+        }
 
-    const latest = this.data[this.data.length - 1];
+        const latest = this.data[this.data.length - 1];
 
-    const option = {
-        color: ['#20C997', '#FFC107', '#5C6BC0'],  // 青色、黄色、蓝色
-        tooltip: {
-            trigger: 'item',
-            backgroundColor: 'rgba(44, 62, 80, 0.9)',
-            borderColor: 'transparent',
-            textStyle: { color: '#FFFFFF' },
-            borderRadius: 8,
-            padding: [12, 16],
-            formatter: function (params) {
-                return '<div style="font-weight: 500;">' + params.name + '</div>' +
-                    '金额: ¥' + params.value.toFixed(2) + '<br/>' +
-                    '占比: ' + params.percent + '%';
-            }
-        },
-        series: [{
-            name: '资产配置',
-            type: 'pie',
-            radius: ['30%', '70%'],
-            data: [
-                { value: latest.cash, name: '现金流' },
-                { value: latest.funds, name: '基金资产' },
-                { value: latest.stocks, name: '股票资产' }
-            ],
-            label: {
-                show: true,
-                position: 'inside',
+        const option = {
+            color: ['#20C997', '#FFC107', '#5C6BC0'],  // 青色、黄色、蓝色
+            tooltip: {
+                trigger: 'item',
+                backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                borderColor: 'transparent',
+                textStyle: { color: '#FFFFFF' },
+                borderRadius: 8,
+                padding: [12, 16],
                 formatter: function (params) {
-                    return params.percent + '%\n' + params.name;
-                },
-                fontSize: 13,
-                fontWeight: 'bold',
-                color: '#FFFFFF'
+                    return '<div style="font-weight: 500;">' + params.name + '</div>' +
+                        '金额: ¥' + params.value.toFixed(2) + '<br/>' +
+                        '占比: ' + params.percent + '%';
+                }
             },
-            emphasis: {
-                itemStyle: {
-                    shadowBlur: 20,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.3)'
-                },
+            series: [{
+                name: '资产配置',
+                type: 'pie',
+                radius: ['30%', '70%'],
+                data: [
+                    { value: latest.cash, name: '现金流' },
+                    { value: latest.funds, name: '基金资产' },
+                    { value: latest.stocks, name: '股票资产' }
+                ],
                 label: {
                     show: true,
-                    fontSize: 14,
-                    fontWeight: 'bold'
+                    position: 'inside',
+                    formatter: function (params) {
+                        return params.percent + '%\n' + params.name;
+                    },
+                    fontSize: 13,
+                    fontWeight: 'bold',
+                    color: '#FFFFFF'
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 20,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.3)'
+                    },
+                    label: {
+                        show: true,
+                        fontSize: 14,
+                        fontWeight: 'bold'
+                    }
                 }
-            }
-        }]
-    };
+            }]
+        };
 
-    myChart.setOption(option);
-}
+        myChart.setOption(option);
+    }
 
 // ==================== 头像管理 ====================
 
-class AvatarManager {
+    class AvatarManager {
     constructor() {
         this.avatarCircle = document.getElementById('avatarCircle');
         this.avatarInput = document.getElementById('avatarInput');
