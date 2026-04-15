@@ -349,6 +349,59 @@ body {
     box-shadow: var(--shadow-xs);
 }
 
+/* ==================== 导入导出按钮 ==================== */
+
+.io-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.btn-io {
+    flex: 1;
+    padding: 11px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-xs);
+}
+
+.btn-export {
+    background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%);
+    color: white;
+}
+
+.btn-export:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    background: linear-gradient(135deg, #1E8449 0%, #27AE60 100%);
+}
+
+.btn-export:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-xs);
+}
+
+.btn-import {
+    background: linear-gradient(135deg, #2980B9 0%, #3498DB 100%);
+    color: white;
+}
+
+.btn-import:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    background: linear-gradient(135deg, #1F6391 0%, #2980B9 100%);
+}
+
+.btn-import:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-xs);
+}
+
 /* ==================== 删除按钮 - 优化版本 ==================== */
 
 .btn-delete {
