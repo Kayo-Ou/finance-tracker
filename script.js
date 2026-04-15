@@ -359,10 +359,11 @@ class FinanceTracker {
 
         myChart.setOption(option);
     }
+}
 
 // ==================== 头像管理 ====================
 
-    class AvatarManager {
+class AvatarManager {
     constructor() {
         this.avatarCircle = document.getElementById('avatarCircle');
         this.avatarInput = document.getElementById('avatarInput');
