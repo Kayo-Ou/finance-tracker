@@ -22,6 +22,73 @@ class FinanceTracker {
     // 初始化事件监听
     initEventListeners() {
         document.getElementById('addBtn').addEventListener('click', () => this.addRecord());
+        document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
+        document.getElementById('importBtn').addEventListener('click', () => this.triggerImport());
+        document.getElementById('importFileInput').addEventListener('change', (e) => this.importData(e));
+    }
+
+    // 导出数据
+    exportData() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const filename = `finance-tracker-backup-${yyyy}-${mm}-${dd}.json`;
+
+        const blob = new Blob([JSON.stringify(this.data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    // 触发文件选择器
+    triggerImport() {
+        document.getElementById('importFileInput').value = '';
+        document.getElementById('importFileInput').click();
+    }
+
+    // 导入数据
+    importData(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            let imported;
+            try {
+                imported = JSON.parse(event.target.result);
+            } catch {
+                alert('文件格式错误，请选择有效的 JSON 文件');
+                return;
+            }
+
+            if (!Array.isArray(imported)) {
+                alert('数据格式不正确，请选择有效的备份文件');
+                return;
+            }
+
+            const mode = confirm('点击"确定"覆盖现有数据，点击"取消"合并数据（保留现有记录并添加新记录）');
+
+            if (mode) {
+                // 覆盖模式
+                this.data = imported;
+            } else {
+                // 合并模式：去重（以日期为唯一键）
+                const existingDates = new Set(this.data.map(r => r.date));
+                const newRecords = imported.filter(r => !existingDates.has(r.date));
+                this.data = this.data.concat(newRecords);
+            }
+
+            this.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+            this.saveData();
+            this.renderTable();
+            this.updateCharts();
+            alert(`导入成功！共 ${this.data.length} 条记录`);
+        };
+        reader.readAsText(file);
     }
 
     // 添加新记录
